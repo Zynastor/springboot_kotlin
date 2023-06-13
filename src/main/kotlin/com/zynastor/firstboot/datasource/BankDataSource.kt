@@ -1,4 +1,8 @@
 package com.zynastor.firstboot.datasource
 
-class BankDataSource {
+import com.zynastor.firstboot.model.Bank
+
+interface BankDataSource {
+    fun retrieveBanks():Collection<Bank>
+    fun retrieveBank(accountNumber: String): Bank
 }
