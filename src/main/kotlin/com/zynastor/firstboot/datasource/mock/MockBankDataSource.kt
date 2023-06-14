@@ -4,7 +4,7 @@ import com.zynastor.firstboot.datasource.BankDataSource
 import com.zynastor.firstboot.model.Bank
 import org.springframework.stereotype.Repository
 
-@Repository
+@Repository("mock")
 class MockBankDataSource : BankDataSource {
     val banks = mutableListOf(
         Bank("1234", 3.14, 17),

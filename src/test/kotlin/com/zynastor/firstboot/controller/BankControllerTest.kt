@@ -9,10 +9,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.*
 
 @SpringBootTest
-@TestClassOrder(ClassOrderer.OrderAnnotation::class)
 @AutoConfigureMockMvc
 internal class BankControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
@@ -24,7 +24,6 @@ internal class BankControllerTest @Autowired constructor(
     @Nested
     @DisplayName("GET /api/banks")
     @TestInstance(Lifecycle.PER_CLASS)
-    @Order(1)
     inner class GetBanks {
         @Test
         fun `should return all banks`() {
@@ -34,7 +33,7 @@ internal class BankControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$[0].accountNumber") { value("1234") }
+                    jsonPath("$[0].account_number") { value("1234") }
                 }
         }
     }
@@ -42,7 +41,6 @@ internal class BankControllerTest @Autowired constructor(
     @Nested
     @DisplayName("GET /api/banks/{accountNumber}")
     @TestInstance(Lifecycle.PER_CLASS)
-    @Order(2)
     inner class GetBank {
         @Test
         fun `should return the bank with the given account number`() {
@@ -55,7 +53,7 @@ internal class BankControllerTest @Autowired constructor(
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
                     jsonPath("$.trust") { value("3.14") }
-                    jsonPath("$.transactionFee") { value("17") }
+                    jsonPath("$.default_transaction_fee") { value("17") }
                 }
         }
 
@@ -73,7 +71,6 @@ internal class BankControllerTest @Autowired constructor(
     @Nested
     @DisplayName("POST /api/banks")
     @TestInstance(Lifecycle.PER_CLASS)
-    @Order(3)
     inner class PostNewBank {
         @Test
         fun `should add the new bank`() {
@@ -117,7 +114,6 @@ internal class BankControllerTest @Autowired constructor(
     @Nested
     @DisplayName("PATCH /api/banks")
     @TestInstance(Lifecycle.PER_CLASS)
-    @Order(4)
     inner class PatchExistingBank {
         @Test
         fun `should update an existing bank`() {
@@ -165,9 +161,9 @@ internal class BankControllerTest @Autowired constructor(
     @Nested
     @DisplayName("DELETE /api/banks/{accountNumber}")
     @TestInstance(Lifecycle.PER_CLASS)
-    @Order(5)
     inner class DeleteExistingBank {
         @Test
+        @DirtiesContext
         fun `should delete the bank with the given account number`() {
             //given
             val accountNumber = 1234
